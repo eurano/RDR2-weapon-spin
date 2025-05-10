@@ -3,6 +3,8 @@
 #include "types.h"
 #include "nativeCaller.h"
 #include "enums.h"
+#include <windows.h>
+#pragma comment (lib, "User32.lib")
 
 struct sGuid {
     alignas(8) int data1;
@@ -10,6 +12,10 @@ struct sGuid {
     alignas(8) int data3;
     alignas(8) int data4;
 };
+
+bool IsKeyDown(int virtualKey) {
+    return (GetAsyncKeyState(virtualKey));
+}
 
 void update() {
     Ped playerPed = PLAYER::PLAYER_PED_ID();
@@ -49,7 +55,8 @@ void update() {
 	bool isSprinting = AI::IS_PED_SPRINTING(playerPed);
 
 
-    if (CONTROLS::IS_CONTROL_JUST_PRESSED(0, 3350541322) && isStill && !isSprinting && currentWeapon != 0 && !isCurrentTwoHanded && !isMounted) {
+    if (IsKeyDown(0x54) && isStill && !isSprinting && currentWeapon != 0 && !isCurrentTwoHanded && !isMounted) {
+
         if (currentAmmoRight == 0 && !dualWield) {
             WEAPON::_0xCBCFFF805F1B4596(playerPed, emoteHash);
             AI::_0xB31A277C1AC7B7FF(playerPed, 4, 1, emoteHash, true, false, false, false);
