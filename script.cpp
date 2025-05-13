@@ -3,6 +3,7 @@
 #include "types.h"
 #include "nativeCaller.h"
 #include "enums.h"
+#include "main.h"
 #include <windows.h>
 #pragma comment (lib, "User32.lib")
 
