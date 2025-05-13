@@ -3,6 +3,7 @@
 #include "types.h"
 #include "nativeCaller.h"
 #include "enums.h"
+#include "main.h"
 
 struct sGuid {
     alignas(8) int data1;
