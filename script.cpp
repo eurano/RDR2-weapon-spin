@@ -5,12 +5,21 @@
 #include "enums.h"
 #include "main.h"
 
+#if _MSC_VER > 1800  
 struct sGuid {
-    alignas(8) int data1;
-    alignas(8) int data2;
-    alignas(8) int data3;
-    alignas(8) int data4;
+	alignas(8) int data1;
+	alignas(8) int data2;
+	alignas(8) int data3;
+	alignas(8) int data4;
 };
+#else   //if Visual Studio 2013
+struct sGuid {
+	__declspec(align(8)) int data1;
+	__declspec(align(8)) int data2;
+	__declspec(align(8)) int data3;
+	__declspec(align(8)) int data4;
+};
+#endif
 
 void update() {
     Ped playerPed = PLAYER::PLAYER_PED_ID();
@@ -52,22 +61,22 @@ void update() {
 
     if (CONTROLS::IS_CONTROL_JUST_PRESSED(0, 3350541322) && isStill && !isSprinting && currentWeapon != 0 && !isCurrentTwoHanded && !isMounted) {
         if (currentAmmoRight == 0 && !dualWield) {
-            WEAPON::_0xCBCFFF805F1B4596(playerPed, emoteHash);
+            WEAPON::_0xCBCFFF805F1B4596(playerPed, emoteHash); //function needs to be added to natives.h manually
             AI::_0xB31A277C1AC7B7FF(playerPed, 4, 1, emoteHash, true, false, false, false);
             WEAPON::_0x01F661BB9C71B465(playerPed, 1, spin);
-            WEAPON::_SET_GUN_SPINNING_INVENTORY_SLOT_ID_ACTIVATE(playerPed, 0);
+            WEAPON::_SET_GUN_SPINNING_INVENTORY_SLOT_ID_ACTIVATE(playerPed, 0); //function needs to be added to natives.h manually
         }
         else if (currentAmmoLeft == 0 && !dualWield) {
-            WEAPON::_0xCBCFFF805F1B4596(playerPed, leftEmoteHash);
+            WEAPON::_0xCBCFFF805F1B4596(playerPed, leftEmoteHash); //function needs to be added to natives.h manually
             AI::_0xB31A277C1AC7B7FF(playerPed, 4, 1, leftEmoteHash, true, false, false, false);
             WEAPON::_0x01F661BB9C71B465(playerPed, 1, spin);
-            WEAPON::_SET_GUN_SPINNING_INVENTORY_SLOT_ID_ACTIVATE(playerPed, 0);
+            WEAPON::_SET_GUN_SPINNING_INVENTORY_SLOT_ID_ACTIVATE(playerPed, 0); //function needs to be added to natives.h manually
         }
         else if (dualWield == true) {
-            WEAPON::_0xCBCFFF805F1B4596(playerPed, dualEmoteHash);
+            WEAPON::_0xCBCFFF805F1B4596(playerPed, dualEmoteHash); //function needs to be added to natives.h manually
             AI::_0xB31A277C1AC7B7FF(playerPed, 4, 1, dualEmoteHash, true, false, false, false);
             WEAPON::_0x01F661BB9C71B465(playerPed, 1, spin);
-            WEAPON::_SET_GUN_SPINNING_INVENTORY_SLOT_ID_ACTIVATE(playerPed, 0);
+            WEAPON::_SET_GUN_SPINNING_INVENTORY_SLOT_ID_ACTIVATE(playerPed, 0); //function needs to be added to natives.h manually
         }
     }
 }
