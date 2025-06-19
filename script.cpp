@@ -57,12 +57,24 @@ void update() {
     if (!currentlyRunning && !WEAPON::_0x705BE297EEBDB95D(currentWeapon)) return;
     if (!currentlyRunning && WEAPON::_0x0556E9D2ECF39D01(currentWeapon)) return;
 
-    sGuid guidRight = {}, guidLeft = {};
+    sGuid guidRight = {}, guidLeft = {}, guidHolsterRight = {}, guidHolsterLeft = {};
     int ammoRight = 0, ammoLeft = 0;
-    WEAPON::_0x6929E22158E52265(playerPed, 2, (Any*)&guidRight);
-    WEAPON::_0x6929E22158E52265(playerPed, 3, (Any*)&guidLeft);
-    WEAPON::_0x678F00858980F516(playerPed, (Any*)&ammoRight, (Any*)&guidRight);
-    WEAPON::_0x678F00858980F516(playerPed, (Any*)&ammoLeft, (Any*)&guidLeft);
+    bool gotRight = WEAPON::_0x6929E22158E52265(playerPed, 0, (Any*)&guidRight);
+    bool gotLeft = WEAPON::_0x6929E22158E52265(playerPed, 1, (Any*)&guidLeft);
+    bool gotAmmoRight = WEAPON::_0x678F00858980F516(playerPed, (Any*)&ammoRight, (Any*)&guidRight);
+    bool gotAmmoLeft = WEAPON::_0x678F00858980F516(playerPed, (Any*)&ammoLeft, (Any*)&guidLeft);
+
+    Hash weaponHashRight = 0;
+    Hash weaponHashLeft = 0;
+
+    WEAPON::GET_CURRENT_PED_WEAPON(playerPed, &weaponHashRight, true, 0, false);
+    WEAPON::GET_CURRENT_PED_WEAPON(playerPed, &weaponHashLeft, true, 1, false);
+
+    int ammoHolsterRight = 0, ammoHolsterLeft = 0;
+	WEAPON::_0x6929E22158E52265(playerPed, 2, (Any*)&guidHolsterRight);
+	WEAPON::_0x6929E22158E52265(playerPed, 3, (Any*)&guidHolsterLeft);
+    WEAPON::_0x678F00858980F516(playerPed, (Any*)&ammoHolsterRight, (Any*)&guidHolsterRight);
+    WEAPON::_0x678F00858980F516(playerPed, (Any*)&ammoHolsterLeft, (Any*)&guidHolsterLeft);
 
     Hash emoteHash = GAMEPLAY::GET_HASH_KEY(const_cast<char*>("KIT_EMOTE_TWIRL_GUN"));
     Hash spinType = GAMEPLAY::GET_HASH_KEY(const_cast<char*>("REVERSE_SPIN"));
@@ -70,15 +82,15 @@ void update() {
     Hash dualEmoteHash = GAMEPLAY::GET_HASH_KEY(const_cast<char*>("KIT_EMOTE_TWIRL_GUN_DUAL"));
 
     if (IsKeyDown(0x54) && !trackingSpin && !PED::IS_PED_RELOADING(playerPed)) {
-        if (ammoRight == 0 && ammoLeft == 0) {
+        if (ammoRight != 0 && ammoLeft != 0 && weaponHashLeft != -1569615261 && weaponHashRight != -1569615261) {
             PlayGunSpinEmote(playerPed, dualEmoteHash, spinType);
             trackingSpin = true;
         }
-        else if (ammoRight == 0) {
+        else if (ammoHolsterRight == 0 && weaponHashRight != -1569615261) {
             PlayGunSpinEmote(playerPed, emoteHash, spinType);
             trackingSpin = true;
         }
-        else if (ammoLeft == 0) {
+        else if (ammoHolsterLeft == 0 && weaponHashRight != -1569615261) {
             PlayGunSpinEmote(playerPed, leftEmoteHash, spinType);
             trackingSpin = true;
         }
