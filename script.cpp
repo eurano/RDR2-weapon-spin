@@ -1,5 +1,6 @@
 #include "script.h"
 #include <windows.h>
+#include "IniOptions.h"
 
 struct sGuid {
     alignas(8) int data1;
@@ -28,9 +29,12 @@ bool isAnimRunning(Ped ped) {
     return AI::_0xCF9B71C0AF824036(ped, 4);
 }
 
+static IniOptions iniOptions;
+static int keybind = iniOptions.getKeybind();
 static bool trackingSpin = false;
 
 void update() {
+
     Ped playerPed = PLAYER::PLAYER_PED_ID();
 
     if (PLAYER::IS_PLAYER_DEAD(PLAYER::PLAYER_ID())) {
@@ -71,8 +75,8 @@ void update() {
     WEAPON::GET_CURRENT_PED_WEAPON(playerPed, &weaponHashLeft, true, 1, false);
 
     int ammoHolsterRight = 0, ammoHolsterLeft = 0;
-	WEAPON::_0x6929E22158E52265(playerPed, 2, (Any*)&guidHolsterRight);
-	WEAPON::_0x6929E22158E52265(playerPed, 3, (Any*)&guidHolsterLeft);
+    WEAPON::_0x6929E22158E52265(playerPed, 2, (Any*)&guidHolsterRight);
+    WEAPON::_0x6929E22158E52265(playerPed, 3, (Any*)&guidHolsterLeft);
     WEAPON::_0x678F00858980F516(playerPed, (Any*)&ammoHolsterRight, (Any*)&guidHolsterRight);
     WEAPON::_0x678F00858980F516(playerPed, (Any*)&ammoHolsterLeft, (Any*)&guidHolsterLeft);
 
@@ -81,7 +85,7 @@ void update() {
     Hash leftEmoteHash = GAMEPLAY::GET_HASH_KEY(const_cast<char*>("KIT_EMOTE_TWIRL_GUN_LEFT_HOLSTER"));
     Hash dualEmoteHash = GAMEPLAY::GET_HASH_KEY(const_cast<char*>("KIT_EMOTE_TWIRL_GUN_DUAL"));
 
-    if (IsKeyDown(0x54) && !trackingSpin && !PED::IS_PED_RELOADING(playerPed)) {
+    if (IsKeyDown(keybind) && !trackingSpin && !PED::IS_PED_RELOADING(playerPed)) {
         if (ammoRight != 0 && ammoLeft != 0 && weaponHashLeft != -1569615261 && weaponHashRight != -1569615261) {
             PlayGunSpinEmote(playerPed, dualEmoteHash, spinType);
             trackingSpin = true;
