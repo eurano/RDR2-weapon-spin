@@ -30,7 +30,9 @@ bool isAnimRunning(Ped ped) {
 }
 
 static IniOptions iniOptions;
-static int keybind = iniOptions.getKeybind();
+static int spinKeybind = iniOptions.getSpinKeybind();
+static int holsterKeybind = iniOptions.getHolsterKeybind();
+static bool allowMounted = iniOptions.getAllowMounted();
 static bool trackingSpin = false;
 
 void update() {
@@ -47,12 +49,21 @@ void update() {
 
     bool currentlyRunning = isAnimRunning(playerPed);
 
+    if (trackingSpin && IsKeyDown(holsterKeybind)) {
+		ResetAnimation(playerPed);
+        AI::CLEAR_PED_SECONDARY_TASK(playerPed);
+		trackingSpin = false;
+    }
+
     if (trackingSpin && !currentlyRunning) {
         ResetAnimation(playerPed);
         trackingSpin = false;
     }
 
-    if (PED::IS_PED_ON_MOUNT(playerPed)) return;
+    if (!allowMounted) {
+        if (PED::IS_PED_ON_MOUNT(playerPed)) return;
+    };
+
     if (!currentlyRunning && (AI::IS_PED_SPRINTING(playerPed) || !AI::IS_PED_STILL(playerPed))) return;
 
     Hash currentWeapon = 0;
@@ -85,8 +96,8 @@ void update() {
     Hash leftEmoteHash = GAMEPLAY::GET_HASH_KEY(const_cast<char*>("KIT_EMOTE_TWIRL_GUN_LEFT_HOLSTER"));
     Hash dualEmoteHash = GAMEPLAY::GET_HASH_KEY(const_cast<char*>("KIT_EMOTE_TWIRL_GUN_DUAL"));
 
-    if (IsKeyDown(keybind) && !trackingSpin && !PED::IS_PED_RELOADING(playerPed)) {
-        if (ammoRight != 0 && ammoLeft != 0 && weaponHashLeft != -1569615261 && weaponHashRight != -1569615261) {
+    if (IsKeyDown(spinKeybind) && !trackingSpin && !PED::IS_PED_RELOADING(playerPed)) {
+        if (ammoRight != 0 && ammoLeft != 0 && weaponHashLeft != -1569615261 && weaponHashRight != -1569615261 && !WEAPON::_0x0556E9D2ECF39D01(weaponHashLeft)) {
             PlayGunSpinEmote(playerPed, dualEmoteHash, spinType);
             trackingSpin = true;
         }
