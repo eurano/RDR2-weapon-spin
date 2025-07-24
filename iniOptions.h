@@ -7,11 +7,16 @@ class IniOptions
 {
 protected:
 	CSimpleIniA generalIni{};
-	char keybind;
+	char spinKeybind;
+	char holsterKeybind;
+	bool allowMounted;
 	int getIniValue(const char* value);
+	bool getBoolIniValue(const char* value);
 	IniOptions& loadOptions();
 public:
 	IniOptions();
-	int getKeybind();
+	int getSpinKeybind();
+	int getHolsterKeybind();
+	bool getAllowMounted();
 };
 #endif
