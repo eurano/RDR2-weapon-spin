@@ -104,7 +104,7 @@ void update() {
     Hash dualEmoteHash = GAMEPLAY::GET_HASH_KEY(const_cast<char*>("KIT_EMOTE_TWIRL_GUN_DUAL"));
 
     if (CONTROLS::IS_CONTROL_JUST_PRESSED(0, spinKeybind) && !trackingSpin && !PED::IS_PED_RELOADING(playerPed)) {
-        if (ammoRight != 0 && ammoLeft != 0 && weaponHashLeft != -1569615261 && weaponHashRight != -1569615261) {
+        if (ammoRight != 0 && ammoLeft != 0 && weaponHashLeft != -1569615261 && weaponHashRight != -1569615261 && !WEAPON::_0x0556E9D2ECF39D01(weaponHashLeft)) {
             PlayGunSpinEmote(playerPed, dualEmoteHash, spinType);
             trackingSpin = true;
         }
